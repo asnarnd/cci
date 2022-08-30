@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -303,7 +303,7 @@ namespace Microsoft.Cci.Ast {
       get {
         PlatformType/*?*/ platformType = this.platformType;
         if (platformType == null) {
-          platformType = new PlatformType(this.HostEnvironment);
+          platformType = GetPlatformType();
           lock (this) {
             if (this.platformType == null)
               this.platformType = platformType;
@@ -314,6 +314,13 @@ namespace Microsoft.Cci.Ast {
     }
     //^ [Once]
     PlatformType/*?*/ platformType;
+
+    /// <summary>
+    /// Returns an object that provides a collection of references to types from the core platform, such as System.Object and System.String.
+    /// </summary>
+    protected virtual PlatformType GetPlatformType() {
+      return new PlatformType(this.HostEnvironment);
+    }
 
     /// <summary>
     /// The root of an object model that represents the output of a compilation. This includes a symbol table that corresponds to the
