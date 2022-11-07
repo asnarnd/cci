@@ -329,7 +329,11 @@ namespace Microsoft.Cci.Ast {
     public Unit Result {
       get { return this.result; }
     }
-    readonly Unit result;
+
+    /// <summary>
+    /// Make protected for compilations not generating PE's, etc.
+    /// </summary>
+    protected Unit result;
 
     /// <summary>
     /// An object that can map some kinds of ILocation objects to IPrimarySourceLocation objects.
