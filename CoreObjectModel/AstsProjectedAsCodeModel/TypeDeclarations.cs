@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -1914,8 +1914,11 @@ namespace Microsoft.Cci.Ast {
       get {
         if (this.nestedTypeDefinition == null) {
           lock (GlobalLock.LockingObject) {
-            if (this.nestedTypeDefinition == null)
-              this.CreateNestedTypeAndUpdateBackingField(); //the backing field is updated before returning, in order to short-circuit recursive call backs.
+            if (this.nestedTypeDefinition == null) {
+              NestedTypeDefinition notBacked = this.CreateNestedTypeAndUpdateBackingField(); //the backing field is updated before returning, in order to short-circuit recursive call backs.
+              if (this.nestedTypeDefinition == null)
+                return notBacked;
+            }
           }
         }
         return this.nestedTypeDefinition;
