@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
@@ -560,11 +560,16 @@ namespace Microsoft.Cci.Ast {
     public IEnumerable<INamespaceDeclarationMember> Members {
       get {
         if (this.cachedMembers == null)
-          this.cachedMembers = this.ComputeCachedMemberList();
+          lock(computeCacheLock)
+          {
+             if (this.cachedMembers == null)
+               this.cachedMembers = this.ComputeCachedMemberList();
+          }
         return this.cachedMembers;
       }
     }
     private IEnumerable<INamespaceDeclarationMember>/*?*/ cachedMembers;
+    private readonly object computeCacheLock = new object();
 
     /// <summary>
     /// A list of members that are either supplied as an argument during construction or later filled
