@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -1632,7 +1632,7 @@ namespace Microsoft.Cci.Ast {
       //^ ensures this.containingTypeDeclaration == containingTypeDeclaration;
     {
       if (template.body != null)
-        this.body = (BlockStatement)template.body.MakeCopyFor(containingTypeDeclaration.DummyBlock);
+        this.body = (BlockStatement)template.body.MakeCopyFor(this.DummyBlock);
       //TODO: provide a way to provide body on demand by reparsing it.
       if (template.genericParameters != null && template.genericParameters.Count > 0)
         this.genericParameters = new List<GenericMethodParameterDeclaration>(template.genericParameters);

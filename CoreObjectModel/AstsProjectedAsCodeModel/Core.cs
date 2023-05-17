@@ -4875,7 +4875,7 @@ namespace Microsoft.Cci.Ast {
     {
       if (this.stopTraversal) return;
       foreach (CatchClause catchClause in catchClauses)
-        this.Visit(catchClause);
+        catchClause.Dispatch(this);
     }
 
     /// <summary>
@@ -4887,6 +4887,8 @@ namespace Microsoft.Cci.Ast {
       if (this.stopTraversal) return;
       //^ int oldCount = this.path.Count;
       this.path.Push(catchClause);
+      if (catchClause.ExceptionType != null)
+        this.VisitTypeExpression(catchClause.ExceptionType);
       if (catchClause.FilterCondition != null)
         this.VisitExpression(catchClause.FilterCondition);
       this.VisitStatement(catchClause.Body);
