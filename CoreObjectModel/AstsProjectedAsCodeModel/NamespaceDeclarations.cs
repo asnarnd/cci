@@ -1248,14 +1248,23 @@ namespace Microsoft.Cci.Ast {
     //^ [Once]
     private BlockStatement/*?*/ dummyBlock;
 
-    private NestedUnitNamespace GetOrCreateNestedUnitNamepace()
-      //^ ensures this.nestedUnitNamespace != null;
-    {
+    private NestedUnitNamespace GetOrCreateNestedUnitNamespace()
+        //^ requires this.nestedUnitNamespace == null;
+        //^ ensures this.nestedUnitNamespace != null;
+      {
       foreach (INamespaceMember member in this.ContainingNamespaceDeclaration.UnitNamespace.GetMembersNamed(this.Name, false)) {
         NestedUnitNamespace/*?*/ nuns = member as NestedUnitNamespace;
         if (nuns != null) {
-          this.nestedUnitNamespace = nuns;
-          nuns.AddNamespaceDeclaration(this);
+          if (this.nestedUnitNamespace == null)
+          {
+            // This can occur at the end of a recursive chain of calls to this
+            // instance method via the above call to GetMembersNamed().
+            // Predecessors in the chain avoid re-adding the declaration to the
+            // namespace.
+            this.nestedUnitNamespace = nuns;
+            nuns.AddNamespaceDeclaration(this);
+          }
+          Debug.Assert(nuns == this.nestedUnitNamespace);
           return nuns;
         }
       }
@@ -1306,8 +1315,13 @@ namespace Microsoft.Cci.Ast {
     public NestedUnitNamespace NestedUnitNamespace {
       get {
         if (this.nestedUnitNamespace == null) {
-          this.GetOrCreateNestedUnitNamepace();
-          //^ assert this.nestedUnitNamespace != null;
+          lock(GlobalLock.LockingObject)
+          {
+            if (this.nestedUnitNamespace == null)
+            {
+              this.GetOrCreateNestedUnitNamespace();
+            }
+          }
         }
         return this.nestedUnitNamespace;
       }
