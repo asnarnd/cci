@@ -1260,12 +1260,12 @@ namespace Microsoft.Cci.Ast {
             // This can occur at the end of a recursive chain of calls to this
             // instance method via the above call to GetMembersNamed().
             // Predecessors in the chain avoid re-adding the declaration to the
-            // namespace.
+            // namespace, and/or erroneously modifying the namespace reference.
             this.nestedUnitNamespace = nuns;
             nuns.AddNamespaceDeclaration(this);
           }
           Debug.Assert(nuns == this.nestedUnitNamespace);
-          return nuns;
+          return this.nestedUnitNamespace;
         }
       }
       NestedUnitNamespace result = this.nestedUnitNamespace = this.CreateNestedNamespace();
