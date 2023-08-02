@@ -560,7 +560,7 @@ namespace Microsoft.Cci.Ast {
     public IEnumerable<INamespaceDeclarationMember> Members {
       get {
         if (this.cachedMembers == null)
-          lock(computeCacheLock)
+          lock(GlobalLock.LockingObject)
           {
              if (this.cachedMembers == null)
                this.cachedMembers = this.ComputeCachedMemberList();
@@ -569,7 +569,6 @@ namespace Microsoft.Cci.Ast {
       }
     }
     private IEnumerable<INamespaceDeclarationMember>/*?*/ cachedMembers;
-    private readonly object computeCacheLock = new object();
 
     /// <summary>
     /// A list of members that are either supplied as an argument during construction or later filled
