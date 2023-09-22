@@ -1180,7 +1180,8 @@ namespace Microsoft.Cci.Ast {
         BlockStatement/*?*/ outerDummyBlock = this.outerDummyBlock;
         if (outerDummyBlock == null) {
           lock (GlobalLock.LockingObject) {
-            if (this.outerDummyBlock == null) {
+            outerDummyBlock = this.outerDummyBlock;
+            if (outerDummyBlock == null) {
               this.outerDummyBlock = outerDummyBlock = BlockStatement.CreateDummyFor(this.SourceLocation);
               outerDummyBlock.SetContainers(this.ContainingNamespaceDeclaration.DummyBlock, this);
             }
