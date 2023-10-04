@@ -2571,7 +2571,10 @@ namespace Microsoft.Cci.Ast {
     /// </summary>
     /// <returns></returns>
     public override string ToString() {
-      return this.Helper.GetTypeName(this.TypeDefinition);
+      // Don't evaluate TypeDefinition - when a debugger calls this before the
+      // node construction is complete, the node may be skewed or fouled.
+      //return this.Helper.GetTypeName(this.TypeDefinition);
+      return GetType().FullName;
     }
 
     /// <summary>
