@@ -2052,6 +2052,7 @@ namespace Microsoft.Cci.Ast {
   /// <summary>
   /// Corresponds to a source language type declaration, such as a C# partial class. One of more of these make up a type definition. 
   /// </summary>
+  [DebuggerDisplay("{GetType().FullName}")]
   public abstract class TypeDeclaration : SourceItemWithAttributes, IContainer<IAggregatableTypeDeclarationMember>, IContainer<ITypeDeclarationMember>, IDeclaration, INamedEntity, IErrorCheckable {
     /// <summary>
     /// A collection of flags that correspond to modifiers such as public and abstract.
@@ -2571,10 +2572,7 @@ namespace Microsoft.Cci.Ast {
     /// </summary>
     /// <returns></returns>
     public override string ToString() {
-      // Don't evaluate TypeDefinition - when a debugger calls this before the
-      // node construction is complete, the node may be skewed or fouled.
-      //return this.Helper.GetTypeName(this.TypeDefinition);
-      return GetType().FullName;
+      return this.Helper.GetTypeName(this.TypeDefinition);
     }
 
     /// <summary>
