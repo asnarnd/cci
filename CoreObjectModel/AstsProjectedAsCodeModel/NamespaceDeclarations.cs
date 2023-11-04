@@ -1247,6 +1247,21 @@ namespace Microsoft.Cci.Ast {
     //^ [Once]
     private BlockStatement/*?*/ dummyBlock;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    protected virtual void ResetDummyBlockIfNecessary(NamespaceDeclaration containingNamespace) {
+      if (this.dummyBlock == null) {
+        return;
+      }
+      lock(this) {
+        if (this.dummyBlock != null &&
+            this.dummyBlock.ContainingNamespaceDeclaration != containingNamespace) {
+            this.dummyBlock = null;
+        }
+      }
+    }
+
     private NestedUnitNamespace GetOrCreateNestedUnitNamespace()
         //^ requires this.nestedUnitNamespace == null;
         //^ ensures this.nestedUnitNamespace != null;
@@ -1333,6 +1348,7 @@ namespace Microsoft.Cci.Ast {
     /// care not to call any other methods or property/event accessors on the object until after this method has been called.
     /// </summary>
     public virtual void SetContainingNamespaceDeclaration(NamespaceDeclaration containingNamespaceDeclaration, bool recurse) {
+      this.ResetDummyBlockIfNecessary(containingNamespaceDeclaration);
       this.containingNamespaceDeclaration = containingNamespaceDeclaration;
       if (!recurse) return;
       this.SetContainingNodes();

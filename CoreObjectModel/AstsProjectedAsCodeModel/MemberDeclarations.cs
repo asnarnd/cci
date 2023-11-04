@@ -1786,6 +1786,21 @@ namespace Microsoft.Cci.Ast {
     private BlockStatement/*?*/ dummyBlock;
 
     /// <summary>
+    /// Reset block that is the containing block for any expressions contained inside the type declaration
+    /// but not inside of a method, if necessary
+    /// </summary>
+    /// <value></value>
+    protected void ResetDummyBlockIfNecessary(TypeDeclaration containingTypeDeclaration) {
+      if (dummyBlock != null && dummyBlock.ContainingTypeDeclaration != containingTypeDeclaration) {
+        lock(this) {
+          if (dummyBlock != null && dummyBlock.ContainingTypeDeclaration != containingTypeDeclaration) {
+            dummyBlock = null;
+          }
+        }
+      }
+    }
+
+    /// <summary>
     /// If the method is generic then this list contains the type parameters.
     /// </summary>
     public IEnumerable<GenericMethodParameterDeclaration> GenericParameters {
@@ -2279,6 +2294,7 @@ namespace Microsoft.Cci.Ast {
     public override void SetContainingTypeDeclaration(TypeDeclaration containingTypeDeclaration, bool recurse)
       //^ ensures this.ContainingTypeDeclaration == containingTypeDeclaration;
     {
+      ResetDummyBlockIfNecessary(containingTypeDeclaration);
       base.SetContainingTypeDeclaration(containingTypeDeclaration, recurse);
       //^ assert this.ContainingTypeDeclaration == containingTypeDeclaration;
       if (!recurse) return;
