@@ -760,7 +760,10 @@ namespace Microsoft.Cci.Ast {
       }
       //^ assume false; //unsatisfied precondition: requires this.SourceLocation.SourceDocument == edit.SourceLocationBeforeEdit.SourceDocument;
       RootNamespaceDeclaration result = this.GetUpdatedRootNamespace(oldMember, newMember, edit, true);
-      this.CompareOldAndNew(oldMember, newMember, edit, out editEventArgs, out symbolTableEditEventArgs);
+      // This call breaks the contracts for the symbol table, because it
+      // accesses definitions before the tree is completed.
+      //this.CompareOldAndNew(oldMember, newMember, edit, out editEventArgs, out symbolTableEditEventArgs);
+      editEventArgs = symbolTableEditEventArgs = null;
       return result;
     }
 
