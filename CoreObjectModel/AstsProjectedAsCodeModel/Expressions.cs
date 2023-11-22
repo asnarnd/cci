@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -2718,6 +2718,15 @@ namespace Microsoft.Cci.Ast {
     /// <param name="sourceLocation">The source location corresponding to the newly allocated expression.</param>
     public BaseClassReference(ISourceLocation sourceLocation)
       : base(sourceLocation) {
+    }
+
+    /// <summary>
+    /// Allocates an expression that binds to the base class instance of the current object instance.
+    /// </summary>
+    /// <param name="containingBlock">A code block in the current object instance.</param>
+    /// <param name="sourceLocation">The source location corresponding to the newly allocated expression.</param>
+    public BaseClassReference(BlockStatement containingBlock, ISourceLocation sourceLocation)
+      : base(containingBlock, sourceLocation) {
     }
 
     /// <summary>
