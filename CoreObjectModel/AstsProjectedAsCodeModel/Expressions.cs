@@ -5773,6 +5773,32 @@ namespace Microsoft.Cci.Ast {
             }
             return value;
           }
+        case PrimitiveTypeCode.NotPrimitive: {
+          if (targetType == PlatformType.SystemDecimal.ResolvedType) {
+            IConvertible/*?*/ ic = value as IConvertible;
+            if (ic != null) {
+              switch (ic.GetTypeCode()) {
+                case System.TypeCode.SByte:
+                  return (decimal)ic.ToSByte(null);
+                case System.TypeCode.Byte:
+                  return (decimal)ic.ToByte(null);
+                case System.TypeCode.Int16:
+                  return (decimal)ic.ToInt16(null);
+                case System.TypeCode.UInt16:
+                  return (decimal)ic.ToUInt16(null);
+                case System.TypeCode.Int32:
+                  return (decimal)ic.ToUInt32(null);
+                case System.TypeCode.Int64:
+                  return (decimal)ic.ToInt64(null);
+                case System.TypeCode.UInt32:
+                  return (decimal)ic.ToUInt32(null);
+                case System.TypeCode.UInt64:
+                  return (decimal)ic.ToUInt64(null);
+              }
+            }
+          }
+          break;
+        }
       }
       return value;
     }
