@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -465,6 +465,11 @@ namespace Microsoft.Cci {
     /// Include the visibility of the member in its name.
     /// </summary>
     Visibility=UseTypeKeywords << 1,
+
+    /// <summary>
+    /// Include field initializer value if any.
+    /// </summary>
+    UseFieldInitializer=Visibility << 1,
   }
 
   /// <summary>
