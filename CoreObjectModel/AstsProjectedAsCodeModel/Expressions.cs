@@ -16453,6 +16453,12 @@ namespace Microsoft.Cci.Ast {
       if (qualifyingType != null) {
         if (!this.ContainingBlock.ContainingTypeDeclaration.CanAccess(qualifyingType))
           resolvedQualifier = this.ResolveQualifierAsNamespace(reportError);
+        else if (this.ContainingBlock.ContainingTypeDeclaration.TypeDefinition == qualifyingType) {
+          INamespaceTypeDefinition namespaceType = qualifyingType as INamespaceTypeDefinition;
+          if (namespaceType != null) {
+            resolvedQualifier = namespaceType.ContainingNamespace;
+          }
+        }
         else {
           INestedTypeDefinition/*?*/ resolvedTypeMember = this.ResolveTypeMember(qualifyingType, false) as INestedTypeDefinition;
           if (resolvedTypeMember != null) {
