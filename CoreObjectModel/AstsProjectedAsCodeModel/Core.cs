@@ -6883,10 +6883,9 @@ namespace Microsoft.Cci.Ast {
       this.Visit(propertyDeclaration.SourceAttributes);
       this.VisitTypeExpression(propertyDeclaration.Type);
       this.Visit(propertyDeclaration.Parameters);
-      if (propertyDeclaration.GetterBody != null)
-        this.VisitStatement(propertyDeclaration.GetterBody);
-      if (propertyDeclaration.SetterBody != null)
-        this.VisitStatement(propertyDeclaration.SetterBody);
+      foreach (MethodDeclaration accessor in propertyDeclaration.Accessors) {
+        this.Visit(accessor);
+      }
       //^ assume this.path.Count == oldCount+1; //True because all of the virtual methods of this class promise not to decrease this.path.Count.
       this.path.Pop();
     }
