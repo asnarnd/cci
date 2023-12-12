@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.Cci.Contracts;
 using Microsoft.Cci.Immutable;
 
@@ -2847,6 +2846,7 @@ namespace Microsoft.Cci.Ast {
           flags |= MethodDeclaration.Flags.SpecialName;
           this.getter = new MethodDeclaration(this.getterAttributes, flags, this.Visibility, typeExpr, this.implementedInterfaces, name, null, parameters, null, getterBody, this.SourceLocation);
           this.getter.SetContainingTypeDeclaration(this.ContainingTypeDeclaration, false);
+          getterBody.SetContainingBlock(this.getter.DummyBlock);
         }
         return this.getter;
       }
@@ -3117,7 +3117,7 @@ namespace Microsoft.Cci.Ast {
             foreach (ParameterDeclaration indexerParameter in this.Parameters) parameters.Add(indexerParameter);
           } else
             parameters = new List<ParameterDeclaration>(1);
-          NameDeclaration pname = new NameDeclaration(this.NameTable.value, sourceLocation);
+          NameDeclaration pname = SetterValueName;
           parameters.Add(new ParameterDeclaration(null, this.Type, pname, null, (ushort)parameters.Count, false, false, false, false, this.Type.SourceLocation));
           //TODO: worry about setter attributes defined on the property itself
           MethodDeclaration.Flags flags = (MethodDeclaration.Flags)(this.flags&0xFFFFF000);
@@ -3187,6 +3187,19 @@ namespace Microsoft.Cci.Ast {
       get { return this.PropertyDefinition; }
     }
 
+    /// <summary>
+    /// Languages that allow alternative syntax for a setter's value parameter may override this.
+    /// This implementation returns the static keyword, or null if there is no setter.
+    /// </summary>
+    public virtual NameDeclaration SetterValueName { 
+      get {
+        if (this.setterValueName == null && this.SetterBody != null) {
+          setterValueName = new NameDeclaration(this.NameTable.value, this.SetterBody.SourceLocation);
+        }
+        return setterValueName;
+      }
+    }
+    NameDeclaration setterValueName;
   }
 
   /// <summary>
