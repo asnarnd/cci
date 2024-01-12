@@ -1899,7 +1899,7 @@ namespace Microsoft.Cci.Ast {
     private NestedTypeDefinition CreateNestedTypeAndUpdateBackingField() {
       var containingTypeDef = this.ContainingTypeDeclaration.TypeDefinition;
       if (this.nestedTypeDefinition != null) {
-        //Could have happened as a side-effect of contructing the containing type definition.
+        //Could have happened as a side-effect of constructing the containing type definition.
         //Typically this only happens if the nested type declaration is asked about its type definition 
         //before the containing type declaration is asked about its type definition.
         return this.nestedTypeDefinition;
@@ -1908,7 +1908,9 @@ namespace Microsoft.Cci.Ast {
         foreach (ITypeDeclarationMember member in containingTypeDeclaration.TypeDeclarationMembers) {
           if (member == this) continue;
           NestedTypeDeclaration/*?*/ nt = member as NestedTypeDeclaration;
-          if (nt != null && nt.Name.UniqueKey == this.Name.UniqueKey && nt.GenericParameterCount == this.GenericParameterCount) {
+          if (nt != null && nt.Name.UniqueKey == this.Name.UniqueKey && nt.GenericParameterCount == this.GenericParameterCount &&
+              //Allow duplicate named declarations in source documents as an editable error, but don't register them with the definition.
+              nt.SourceLocation.SourceDocument != this.SourceLocation.SourceDocument) {
             nt.TypeDefinition.AddTypeDeclaration(this);
             return nt.NestedTypeDefinition;
           }
