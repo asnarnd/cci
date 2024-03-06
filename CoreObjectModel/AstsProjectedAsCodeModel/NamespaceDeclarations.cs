@@ -382,7 +382,7 @@ namespace Microsoft.Cci.Ast {
       if (candidates != null)
         // Now filter them for applicability with the given argument list
         foreach (IMethodDefinition method in candidates)
-          if (this.Helper.MethodIsEligible(method, arguments))
+          if (this.Helper.MethodIsEligible(method, arguments, false))
             result.Add(method);      
     }
 
@@ -419,7 +419,7 @@ namespace Microsoft.Cci.Ast {
       if (candidates != null)
         // Now filter the methods for applicability.
         foreach (IMethodDefinition method in candidates)
-          if (this.Helper.MethodIsEligible(method, arguments))
+          if (this.Helper.MethodIsEligible(method, arguments, false))
             result.Add(method);
     }
 

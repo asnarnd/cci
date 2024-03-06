@@ -2228,21 +2228,25 @@ namespace Microsoft.Cci.Ast {
     /// <summary>
     /// Returns true if the given method can be called with the given arguments, if 
     /// need be after applying implicit conversions and constructing a parameter array, 
-    /// or a runtimeargumenthandle.
+    /// or a runtimeargumenthandle. If argumentListIsIncomplete is true only the
+    /// first n parameters of the method are considered, where n is the number of
+    /// given arguments.
     /// </summary>
     //^ [Pure]
-    public virtual bool MethodIsEligible(IMethodDefinition method, IEnumerable<Expression> arguments) {
-      return this.MethodIsEligible(method, arguments, false);
+    public virtual bool MethodIsEligible(IMethodDefinition method, IEnumerable<Expression> arguments, bool argumentListIsIncomplete) {
+      return this.MethodIsEligible(method, arguments, argumentListIsIncomplete, false);
     }
 
     /// <summary>
     /// Returns true if the given method can be called with the given arguments, if 
     /// need be after applying implicit conversions and constructing a parameter array, 
     /// or a runtimeargumenthandle. If allowTypeMismatch is true then only the number of parameters are considered
-    /// when deciding if method is eligible.
+    /// when deciding if method is eligible. If argumentListIsIncomplete is true only the
+    /// first n parameters of the method are considered, where n is the number of
+    /// given arguments.
     /// </summary>
     //^ [Pure]
-    protected virtual bool MethodIsEligible(IMethodDefinition method, IEnumerable<Expression> arguments, bool allowTypeMismatch) {
+    protected virtual bool MethodIsEligible(IMethodDefinition method, IEnumerable<Expression> arguments, bool argumentListIsIncomplete, bool allowTypeMismatch) {
       IEnumerator<IParameterDefinition> methodParameterEnumerator = method.Parameters.GetEnumerator();
       ITypeDefinition methodParamArrayElementType = Dummy.Type;
       foreach (Expression argument in arguments) {
@@ -2278,7 +2282,7 @@ namespace Microsoft.Cci.Ast {
           if (!allowTypeMismatch) return false;
         }
       }
-      if (methodParameterEnumerator.MoveNext()) return methodParameterEnumerator.Current.IsParameterArray;
+      if (methodParameterEnumerator.MoveNext()) return argumentListIsIncomplete || methodParameterEnumerator.Current.IsParameterArray;
       return true;
     }
 
@@ -2893,10 +2897,10 @@ namespace Microsoft.Cci.Ast {
       List<IMethodDefinition>/*?*/ ambiguousMatches = null;
       foreach (IMethodDefinition candidate in candidateMethods) {
         if (bestSoFar is Dummy) {
-          if (this.MethodIsEligible(candidate, arguments)) bestSoFar = candidate;
+          if (this.MethodIsEligible(candidate, arguments, false)) bestSoFar = candidate;
           continue;
         }
-        if (!this.MethodIsEligible(candidate, arguments)) {
+        if (!this.MethodIsEligible(candidate, arguments, false)) {
           continue;
         }
         if (this.Method1MatchesArgumentsBetterThanMethod2(bestSoFar, candidate, arguments)) continue;
