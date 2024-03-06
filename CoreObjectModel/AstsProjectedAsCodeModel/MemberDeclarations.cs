@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Cci.Contracts;
 using Microsoft.Cci.Immutable;
 
@@ -776,6 +777,7 @@ namespace Microsoft.Cci.Ast {
     /// <summary>
     /// The number of least significant bits that form part of the value of the field.
     /// </summary>
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public virtual uint BitLength {
       get { return TypeHelper.SizeOfType(this.Type.ResolvedType)*8; }
     }
