@@ -5,7 +5,6 @@
   <PropertyGroup>
     <AssemblyName>$(CciAssemblyNamePrefix)Microsoft.Cci.Ast</AssemblyName>
     <TargetFramework>netstandard2</TargetFramework>
-    <Version>4.1.8</Version>    <!-- Do not modify. -->
     <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
     <Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
     <RootNamespace>Microsoft.Cci</RootNamespace>
