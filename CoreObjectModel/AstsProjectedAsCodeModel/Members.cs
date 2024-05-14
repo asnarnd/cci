@@ -3922,7 +3922,7 @@ namespace Microsoft.Cci.Ast {
     /// True if the referenced method or property does not require an instance of its declaring type as its first argument.
     /// </summary>
     public bool IsStatic {
-      get { return true; }
+      get { return this.declaration.IsStatic; }
     }
 
     #endregion
