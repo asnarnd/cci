@@ -19444,6 +19444,15 @@ namespace Microsoft.Cci.Ast {
     }
 
     /// <summary>
+    /// Veto caching an unexpected resolution if necessary.
+    /// </summary>
+    /// <param name="resolvedType">The result of calling <see cref="Resolve()"/></param>
+    /// <returns>True if the type should be cached and returned by all subsequent accesses of <see cref="ResolvedType"/>.</returns>
+    protected virtual bool ShouldCacheThisResolution(ITypeDefinition resolvedType) {
+      return true;
+    }
+
+    /// <summary>
     /// The type denoted by the expression. If expression cannot be resolved, a dummy type is returned. If the expression is ambiguous the first matching type is returned.
     /// If the expression does not resolve to exactly one type, an error is added to the error collection of the compilation context.
     /// </summary>
@@ -19451,7 +19460,11 @@ namespace Microsoft.Cci.Ast {
       get {
         if (this.resolvedType == null) {
           //this.resolvedType = Dummy.Type;
-          this.resolvedType = this.Resolve();
+          ITypeDefinition resolvedType = this.Resolve();
+          if (!ShouldCacheThisResolution(resolvedType)) {
+            return resolvedType;
+          }
+          this.resolvedType = resolvedType;
         }
         return this.resolvedType;
       }
