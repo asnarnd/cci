@@ -220,7 +220,7 @@ namespace Microsoft.Cci.Ast {
   /// <summary>
   /// An event is a member that enables an object or class to provide notifications. Clients can attach executable code for events by supplying event handlers.
   /// </summary>
-  public class EventDeclaration : TypeDeclarationMember {
+  public class EventDeclaration : TypeDeclarationMember, ITypedMemberDeclaration {
 
     /// <summary>
     /// Allocates an event member that enables an object or class to provide notifications. Clients can attach executable code for events by supplying event handlers.
@@ -667,7 +667,7 @@ namespace Microsoft.Cci.Ast {
   /// <summary>
   /// A field is a member that represents a variable associated with an object or class.
   /// </summary>
-  public class FieldDeclaration : TypeDeclarationMember {
+  public class FieldDeclaration : TypeDeclarationMember, ITypedMemberDeclaration {
 
     /// <summary>
     /// Allocates a member that represents a variable associated with an object or class.
@@ -1207,7 +1207,7 @@ namespace Microsoft.Cci.Ast {
   /// <summary>
   /// Represents a global variable.
   /// </summary>
-  public class GlobalFieldDeclaration : FieldDeclaration, INamespaceDeclarationMember, IAggregatableNamespaceDeclarationMember, IAggregatableTypeDeclarationMember {
+  public class GlobalFieldDeclaration : FieldDeclaration, ITypedMemberDeclaration, INamespaceDeclarationMember, IAggregatableNamespaceDeclarationMember, IAggregatableTypeDeclarationMember {
 
     /// <summary>
     /// Allocates a member that represents a variable associated with an object or class.

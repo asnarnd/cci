@@ -1872,7 +1872,7 @@ namespace Microsoft.Cci.Ast {
 
     #region ISignatureDeclaration Members
 
-    TypeExpression ISignatureDeclaration.Type {
+    TypeExpression ITypedMemberDeclaration.Type {
       get {
         if (this.returnType == null)
           this.returnType = TypeExpression.For(this.Helper.GetInvokeMethod(this.delegateType).Type);
@@ -2034,7 +2034,7 @@ namespace Microsoft.Cci.Ast {
 
     #region ISignatureDeclaration Members
 
-    TypeExpression ISignatureDeclaration.Type {
+    TypeExpression ITypedMemberDeclaration.Type {
       get { return TypeExpression.For(Dummy.Type); }
     }
 
@@ -18104,7 +18104,12 @@ namespace Microsoft.Cci.Ast {
         this.hasErrors = null;
       return this.resolvedValue;
     }
-    object/*?*/ resolvedValue;
+
+    /// <summary>
+    /// Non null when the name has been suitably bound. Visible to derived classes so that it can be set during construction.
+    /// When non null, the item has been bound and need not be resolved again.
+    /// </summary>
+    protected object/*?*/ resolvedValue;
 
     /// <summary>
     /// Returns true if this resolves to a local declaration or a 
