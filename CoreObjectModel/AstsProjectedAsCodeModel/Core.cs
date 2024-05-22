@@ -3,19 +3,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using Microsoft.Cci.Contracts;
-using Microsoft.Cci.UtilityDataStructures;
 using Microsoft.Cci.Immutable;
 
 //^ using Microsoft.Contracts;
 
 namespace Microsoft.Cci.Ast {
 
-  /// <summary>
-  /// An object that describes an edit to a source file.
-  /// </summary>
-  public abstract class AstSourceDocumentEdit : SourceDocumentEdit {
+    /// <summary>
+    /// An object that describes an edit to a source file.
+    /// </summary>
+    public abstract class AstSourceDocumentEdit : SourceDocumentEdit {
 
     /// <summary>
     /// Allocates an object that describes an edit to a source file.
@@ -2381,25 +2380,36 @@ namespace Microsoft.Cci.Ast {
 
     /// <summary>
     /// Returns true if the given method can be called with the given number of arguments 
-    /// either because the method's last parameter is a parameter array 
+    /// either because the method's last parameter is a parameter array, or ends with optional parameters, 
     /// or because the method accepts extra parameter
     /// </summary>
     //^ [Pure]
     private bool MethodQualifiesEvenIfArgumentNumberMismatches(IMethodDefinition method, uint methodParameterCount, uint argumentCount)
       // ^ requires EnumerationHelper.EnumerableCount(method.Parameters) == methodParameterCount;
     {
+      // Optional parameters (including param array if defined).
+      uint optionalParameterCount = 0;
+      bool hasParamArray = false;
+      bool isLast = true;
+      foreach (IParameterDefinition param in method.Parameters.Reverse()) {
+        if (isLast && param.IsParameterArray) {
+            optionalParameterCount++;
+            hasParamArray = true;
+        }
+        else if (param.HasDefaultValue) optionalParameterCount++;
+        else break;
+        isLast = false;
+      }
+      uint requiredParameterCount = methodParameterCount - optionalParameterCount;
+      bool hasOptionalParameters = optionalParameterCount != 0;
+      if (hasOptionalParameters && requiredParameterCount <= argumentCount && argumentCount <= methodParameterCount) return true;
+      // "extra parameter".
       if (methodParameterCount < 1 || argumentCount < methodParameterCount - 1) return false;
       if (method.AcceptsExtraArguments && argumentCount > methodParameterCount) {
         return true;
       }
-      IEnumerator<IParameterDefinition> parameterEnumerator = method.Parameters.GetEnumerator();
-      while (parameterEnumerator.MoveNext()) {
-        if (--methodParameterCount == 0) {
-          IParameterDefinition lastParameter = parameterEnumerator.Current;
-          if (lastParameter.IsParameterArray) return true;
-        }
-      }
-      return false;
+      // Param array only.
+      return hasParamArray;
     }
 
     /// <summary>
