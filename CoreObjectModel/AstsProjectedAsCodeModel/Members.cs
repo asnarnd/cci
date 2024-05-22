@@ -1462,7 +1462,7 @@ namespace Microsoft.Cci.Ast {
             this.type = Immutable.ModifiedTypeReference.GetModifiedTypeReference(this.FieldDeclaration.Type.ResolvedType,
               IteratorHelper.GetSingletonEnumerable(volatileModifier), this.fieldDeclaration.Compilation.HostEnvironment.InternFactory);
           } else
-            this.type = this.FieldDeclaration.Type.ResolvedType;
+            return this.FieldDeclaration.Type.ResolvedType;
         }
         return this.type;
       }
