@@ -870,7 +870,7 @@ namespace Microsoft.Cci.Ast {
     public ILocalDefinition ExceptionContainer {
       get {
         if (this.exceptionContainer == null) {
-          LocalDefinition exceptionContainer = this.GetNewExceptionContainer();
+          ILocalDefinition exceptionContainer = this.GetNewExceptionContainer();
           lock (this) {
             if (this.exceptionContainer == null) this.exceptionContainer = exceptionContainer;
           }
@@ -900,7 +900,7 @@ namespace Microsoft.Cci.Ast {
     /// <summary>
     /// Allocates the local that contains the exception instance when executing the catch clause body.
     /// </summary>
-    private LocalDefinition GetNewExceptionContainer() {
+    protected virtual ILocalDefinition GetNewExceptionContainer() {
       List<LocalDeclaration> declarations = new List<LocalDeclaration>(1);
       LocalDeclarationsStatement localDeclarationsStatement = new LocalDeclarationsStatement(false, true, false, this.ExceptionType, declarations, this.Name.SourceLocation);
       LocalDeclaration localDeclaration = new LocalDeclaration(false, false, this.Name, null, this.Name.SourceLocation);
