@@ -305,7 +305,7 @@ namespace Microsoft.Cci {
   /// Options that specify how type and namespace member names should be formatted.
   /// </summary>
   [Flags]
-  public enum NameFormattingOptions {
+  public enum NameFormattingOptions : long {
     /// <summary>
     /// Format the name with default options.
     /// </summary>

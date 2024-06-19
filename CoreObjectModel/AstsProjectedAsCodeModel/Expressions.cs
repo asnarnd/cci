@@ -5932,6 +5932,7 @@ namespace Microsoft.Cci.Ast {
           case System.TypeCode.UInt16:
           case System.TypeCode.UInt32:
           case System.TypeCode.UInt64:
+          case System.TypeCode.Decimal:
             return true;
         }
         return false;
