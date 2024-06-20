@@ -6431,6 +6431,7 @@ namespace Microsoft.Cci.Ast {
       this.Visit(enumDeclaration.SourceAttributes);
       foreach (TypeExpression baseType in enumDeclaration.BaseTypes)
         this.VisitTypeExpression(baseType);
+      this.Visit(enumDeclaration.TypeDeclarationMembers);
       //^ assume this.path.Count == oldCount+1; //True because all of the virtual methods of this class promise not to decrease this.path.Count.
       this.path.Pop();
     }
