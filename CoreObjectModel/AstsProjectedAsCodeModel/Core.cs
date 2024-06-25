@@ -6380,7 +6380,7 @@ namespace Microsoft.Cci.Ast {
       //^ int oldCount = this.path.Count;
       NestedNamespaceDeclaration/*?*/ nestedNamespace = namespaceDeclarationMember as NestedNamespaceDeclaration;
       if (nestedNamespace != null)
-        this.Visit(nestedNamespace);
+        nestedNamespace.Dispatch(this);
       else {
         TypeDeclaration/*?*/ typeDeclaration = namespaceDeclarationMember as TypeDeclaration;
         if (typeDeclaration != null)

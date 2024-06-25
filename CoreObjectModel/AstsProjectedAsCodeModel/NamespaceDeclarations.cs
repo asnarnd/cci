@@ -1228,6 +1228,13 @@ namespace Microsoft.Cci.Ast {
     }
 
     /// <summary>
+    /// Calls the visitor.Visit(NestedNamespaceDeclaration) method.
+    /// </summary>
+    public override void Dispatch(SourceVisitor visitor) {
+      visitor.Visit(this);
+    }
+
+    /// <summary>
     /// 
     /// </summary>
     public override BlockStatement DummyBlock {
