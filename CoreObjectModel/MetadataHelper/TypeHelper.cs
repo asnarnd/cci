@@ -510,6 +510,7 @@ namespace Microsoft.Cci {
       Contract.Requires(typeDefinition != null);
       Contract.Requires(member != null);
 
+      if (member.Visibility == TypeMemberVisibility.Other) return false;
       if (TypeHelper.TypesAreEquivalent(typeDefinition, member.ContainingTypeDefinition)) return true;
       if (typeDefinition.IsGeneric && TypeHelper.TypesAreEquivalent(typeDefinition.InstanceType, member.ContainingTypeDefinition))
         return true;
