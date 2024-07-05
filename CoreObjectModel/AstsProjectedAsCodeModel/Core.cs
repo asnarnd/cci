@@ -2950,7 +2950,7 @@ namespace Microsoft.Cci.Ast {
     private IMethodDefinition SingleCandidateWithTheGivenNumberOfArguments(IEnumerable<IMethodDefinition> candidateMethods, IEnumerable<Expression> arguments) {
       IMethodDefinition likelyMatch = Dummy.Method;
       foreach (IMethodDefinition candidate in candidateMethods) {
-        if (this.MethodIsEligible(candidate, arguments, true)) {
+        if (this.MethodIsEligible(candidate, arguments, argumentListIsIncomplete: false, allowTypeMismatch: true)) {
           if (!(likelyMatch is Dummy)) return Dummy.Method;
           likelyMatch = candidate;
         }
