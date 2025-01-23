@@ -734,11 +734,26 @@ namespace Microsoft.Cci.Ast {
       Volatile=Static>>1
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Flags]
-    private enum ExtendedFlags {
+    protected enum ExtendedFlags {
+      /// <summary>
+      /// 
+      /// </summary>
       CustomAttributesNotYetProcessed=Flags.Volatile >> 1,
+      /// <summary>
+      /// 
+      /// </summary>
       Mapped=CustomAttributesNotYetProcessed>>1,
+      /// <summary>
+      /// 
+      /// </summary>
       MarshalledExplicitly=Mapped>>1,
+      /// <summary>
+      /// 
+      /// </summary>
       NotSerialized=MarshalledExplicitly>>1
     }
 
