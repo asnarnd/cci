@@ -15,7 +15,7 @@
     <AssemblyOriginatorKeyFile>$(CciCommonSigningKeyFile)</AssemblyOriginatorKeyFile>
     <IsPackable>false</IsPackable>
     <Product>CCI</Product>
-    <Title>Microsoft.Cci.Asts</Title>
+    <AssemblyTitle>Microsoft.Cci.Asts</AssemblyTitle>
     <Description>A set of base classes that provide common implementations of the functionality required by the Microsoft.Cci source object model.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     
