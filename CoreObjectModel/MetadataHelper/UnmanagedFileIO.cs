@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -8,6 +8,7 @@ using System.Text;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Diagnostics;
 //^ using Microsoft.Contracts;
 
 namespace Microsoft.Cci {
@@ -215,6 +216,7 @@ namespace Microsoft.Cci {
     /// </summary>
     /// <param name="localFileName">The path to the file to read.</param>
     /// <param name="binaryDocument">The binary document whose contents are stored in the given file.</param>
+    /// <param name="bufferAllocator">Optional buffer allocation support supplied by caller.</param>
     /// <exception cref="System.ArgumentException">localFileName is an empty string (""), contains only white space, or contains one
     /// or more invalid characters. -or- localFileName refers to a non-file device, such as "con:", "com1:", "lpt1:", etc. in an NTFS environment.</exception>
     /// <exception cref="System.NotSupportedException">localFileName refers to a non-file device, such as "con:", "com1:", "lpt1:", etc. in a non-NTFS environment.</exception>
@@ -224,9 +226,12 @@ namespace Microsoft.Cci {
     /// <exception cref="System.UnauthorizedAccessException">The file cannot be be read, for example because it is already being accessed exclusively by another process.</exception>
     /// <exception cref="System.IO.PathTooLongException">The specified path, file name, or both exceed the system-defined maximum length. For example, on Windows-based platforms,
     /// paths must be less than 248 characters, and file names must be less than 260 characters.</exception>
-    public static UnmanagedBinaryMemoryBlock CreateUnmanagedBinaryMemoryBlock(string localFileName, IBinaryDocument binaryDocument) {
+    public static UnmanagedBinaryMemoryBlock CreateUnmanagedBinaryMemoryBlock(string localFileName, IBinaryDocument binaryDocument, Func<int, byte[]>/*?*/ bufferAllocator = null) {
+      if (bufferAllocator == null) {
+        bufferAllocator = s => new byte[s];
+      }
       using (FileStream stream = new FileStream(localFileName, FileMode.Open, FileAccess.Read, FileShare.Read)) {
-        return CreateUnmanagedBinaryMemoryBlock(stream, binaryDocument);
+        return CreateUnmanagedBinaryMemoryBlock(stream, binaryDocument, bufferAllocator);
       }
     }
 
@@ -235,8 +240,9 @@ namespace Microsoft.Cci {
     /// </summary>
     /// <param name="stream">A stream of bytes that are to be copied into the resulting memory block.</param>
     /// <param name="binaryDocument">The binary document whose contents are stored in the given file.</param>
+    /// <param name="allocator">A delegate that returns a byte buffer of the specified length reserved for the exclusive use of this method.</param>
     /// <exception cref="System.IO.IOException">The length of the stream is not the same as the length of the binary document, or the stream length is greater than Int32.MaxValue.</exception>
-    public static UnmanagedBinaryMemoryBlock CreateUnmanagedBinaryMemoryBlock(Stream stream, IBinaryDocument binaryDocument) {
+    public static UnmanagedBinaryMemoryBlock CreateUnmanagedBinaryMemoryBlock(Stream stream, IBinaryDocument binaryDocument, Func<int, byte[]> allocator) {
       if (stream.Length != binaryDocument.Length)
         throw new IOException("stream.Length != binaryDocument.Length: " + binaryDocument.Location);
       if (stream.Length > Int32.MaxValue)
@@ -246,7 +252,7 @@ namespace Microsoft.Cci {
       //Read a fixed length block at a time, so that the GC does not come under pressure from lots of large byte arrays.
       int remainingLength = (int)binaryDocument.Length;
       int copyBufferLength = 32 * 1024;
-      byte[] tempBuffer = new byte[copyBufferLength];
+      byte[] tempBuffer = allocator(copyBufferLength);
       fixed (byte* tempBufferPtr = tempBuffer) {
         while (remainingLength > 0) {
           if (remainingLength < copyBufferLength) {
