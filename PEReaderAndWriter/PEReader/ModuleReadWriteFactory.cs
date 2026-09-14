@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -52,20 +52,62 @@ namespace Microsoft.Cci {
     readonly Hashtable<Module> InternedIdToModuleMap;
     Assembly/*?*/ coreAssembly;
 
-    internal readonly IName Value__;
-    internal readonly IName AsyncCallback;
-    internal readonly IName ParamArrayAttribute;
-    internal readonly IName IAsyncResult;
-    internal readonly IName ICloneable;
-    internal readonly IName RuntimeArgumentHandle;
-    internal readonly IName RuntimeFieldHandle;
-    internal readonly IName RuntimeMethodHandle;
-    internal readonly IName RuntimeTypeHandle;
-    internal readonly IName ArgIterator;
-    internal readonly IName IList;
-    internal readonly IName Mscorlib;
-    internal readonly IName System_Runtime;
-    internal readonly IName _Deleted_;
+    internal IName Value__ {
+      get => value_ ??= metadataReaderHost.NameTable.GetNameFor("value__");
+    }
+    IName/*?*/value_ = null;
+    internal IName AsyncCallback {
+      get => asyncCallBack ??= metadataReaderHost.NameTable.GetNameFor(nameof(AsyncCallback));
+    }
+    IName/*?*/asyncCallBack = null;
+    internal IName ParamArrayAttribute {
+      get => paramArrayAttribute ??= metadataReaderHost.NameTable.GetNameFor(nameof(ParamArrayAttribute));
+    }
+    IName/*?*/paramArrayAttribute = null;
+    internal IName IAsyncResult {
+      get => iAsyncResult ??= metadataReaderHost.NameTable.GetNameFor(nameof(IAsyncResult));
+    }
+    IName/*?*/iAsyncResult = null;
+    internal IName ICloneable {
+      get => iCloneable ??= metadataReaderHost.NameTable.GetNameFor(nameof(ICloneable));
+    }
+    IName/*?*/iCloneable = null;
+    internal IName RuntimeArgumentHandle {
+      get => runtimeArgumentHandle ??= metadataReaderHost.NameTable.GetNameFor(nameof(RuntimeArgumentHandle));
+    }
+    IName/*?*/runtimeArgumentHandle = null;
+    internal IName RuntimeFieldHandle {
+      get => runtimeFieldHandle ??= metadataReaderHost.NameTable.GetNameFor(nameof(RuntimeFieldHandle));
+    }
+    IName/*?*/runtimeFieldHandle = null;
+    internal IName RuntimeMethodHandle {
+      get => runtimeMethodHandle ??= metadataReaderHost.NameTable.GetNameFor(nameof(RuntimeMethodHandle));
+    }
+    IName/*?*/runtimeMethodHandle = null;
+    internal IName RuntimeTypeHandle {
+      get => runtimeTypeHandle ??= metadataReaderHost.NameTable.GetNameFor(nameof(RuntimeTypeHandle));
+    }
+    IName/*?*/runtimeTypeHandle = null;
+    internal IName ArgIterator {
+      get => argIterator ??= metadataReaderHost.NameTable.GetNameFor(nameof(ArgIterator));
+    }
+    IName/*?*/argIterator = null;
+    internal IName IList {
+      get => iList ??= metadataReaderHost.NameTable.GetNameFor(nameof(IList));
+    }
+    IName/*?*/iList = null;
+    internal IName Mscorlib {
+      get => mscorlib ??= metadataReaderHost.NameTable.GetNameFor("mscorlib");
+    }
+    IName/*?*/mscorlib = null;
+    internal IName System_Runtime {
+      get => system_Runtime ??= metadataReaderHost.NameTable.GetNameFor("System.Runtime");
+    }
+    IName/*?*/system_Runtime = null;
+    internal IName _Deleted_ {
+      get => _deleted_ ??= metadataReaderHost.NameTable.GetNameFor("_Deleted*");
+    }
+    IName/*?*/_deleted_ = null; 
 
     /*^
     #pragma warning disable 2669
@@ -84,21 +126,6 @@ namespace Microsoft.Cci {
       this.ErrorsReporter = new MetadataReaderErrorsReporter();
       this.metadataReaderHost = metadataReaderHost;
       this.InternedIdToModuleMap = new Hashtable<Module>();
-      INameTable nameTable = metadataReaderHost.NameTable;
-      this.Value__ = nameTable.GetNameFor("value__");
-      this.AsyncCallback = nameTable.GetNameFor("AsyncCallback");
-      this.ParamArrayAttribute = nameTable.GetNameFor("ParamArrayAttribute");
-      this.IAsyncResult = nameTable.GetNameFor("IAsyncResult");
-      this.ICloneable = nameTable.GetNameFor("ICloneable");
-      this.RuntimeArgumentHandle = nameTable.GetNameFor("RuntimeArgumentHandle");
-      this.RuntimeFieldHandle = nameTable.GetNameFor("RuntimeFieldHandle");
-      this.RuntimeMethodHandle = nameTable.GetNameFor("RuntimeMethodHandle");
-      this.RuntimeTypeHandle = nameTable.GetNameFor("RuntimeTypeHandle");
-      this.ArgIterator = nameTable.GetNameFor("ArgIterator");
-      this.IList = nameTable.GetNameFor("IList");
-      this.Mscorlib = nameTable.GetNameFor("mscorlib");
-      this.System_Runtime = nameTable.GetNameFor("System.Runtime");
-      this._Deleted_ = nameTable.GetNameFor("_Deleted*");
     }
     /*^
     #pragma warning restore 2669
